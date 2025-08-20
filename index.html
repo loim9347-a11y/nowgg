@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Cloud Phone UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s ease-in-out;
+        }
+
+        body {
+            background: url('https://files.catbox.moe/l29s7v.gif') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 90vh;
+            max-width: 500px;
+            padding: 10px;
+            align-items: center;
+        }
+
+        .top-bar {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 16px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .search-container {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #search-box {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border-radius: 25px;
+            border: 2px solid #00E4FF;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 228, 255, 0.5);
+        }
+
+        #search-box::placeholder {
+            color: #ccc;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 25px;
+            height: 25px;
+            opacity: 0.8;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .screen {
+            border: 1px solid #00E4FF;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 30px;
+            height: 540px;
+            flex: none;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            transform: scale(0.9);
+            opacity: 0.6;
+            scroll-snap-align: center;
+        }
+
+        .screen.active {
+            transform: scale(1);
+            opacity: 1;
+            box-shadow: 0 0 20px #00E4FF, 0 0 40px #00E4FF;
+        }
+
+        .header {
+            background-color: #008DDA;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            width: auto;
+            position: absolute;
+            top: 10px;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .image {
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .button {
+            background-color: #005A9C;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background-color: #002D4E;
+            transform: scale(1.05);
+        }
+
+        .device-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .clock {
+            font-size: 12px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="top-bar">
+        <div class="left-section">
+            <span class="top-title" style="color:white; font-size:18px;">Thiết Bị Treo Game</span>
+        </div>
+        <div class="right-section">
+            <img src="https://i.imgur.com/3R94nGv.png" alt="icon" style="width:25px; height:25px; opacity: 0.8;" />
+        </div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-box" placeholder="Tìm kiếm game...">
+        <img src="https://files.catbox.moe/ifrifp.gif" alt="search" class="search-icon" />
+    </div>
+
+    <div class="container" id="container">
+        <div class="screen"><div class="header">Thiết Bị VPN App Launcher V3</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive-int2.now.gg/apps/uncube/7074/now.html","_blank")'>Vào Chơi</div></div></div>
+        <div class="screen"><div class="header">Thiết Bị VPN App Launcher V2</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/uncube/10005/now.html","_blank")'>Vào Chơi</div></div></div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Nhiều Game</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.aptoide.partners.nowgg.store%252Ficon%252Faptoide.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Genshin Impact">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/aptoide/5874/aptoide.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Roblox</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Roblox_Logo_2025.png" alt="Genshin Impact">
+                </div>
+                <div class="button" onclick="window.open('https://mathstutor.life/apps/roblox-corporation/5349/roblox.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN App Launcher</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/cognosphere-pte-ltd-/7074/genshin-impact.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN GTA 6 Trailer</div><div class="content"><div class="image"><img src="https://maytinhdaiviet.com/wp-content/uploads/2025/05/gta6_title_logo.webp" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/rohit-gaming-studio/8822/indian-bikes-driving-3d.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Blox Fruit</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F19901%252Ficon%252Fb.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/Blox-fruit/19901/Blox-fruit.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Genshin Inpact</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/com.miHoYo.GenshinImpact/icon/genshin-impact.png" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/cognosphere-pte-ltd/1773/genshin-impact.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Discord</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.discord%252Ficon%252Fdiscord-talk-chat-hang-out.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/discord-inc-/1430/discord-talk-chat-hang-out.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Stumble</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.kitkagames.fallbuddies%252Ficon%252Fstumble-guys.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/a/10011/b.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Call Of Duty</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.activision.callofduty.shooter%252Ficon%252Fcall-of-duty.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/a/10008/b.html","_blank")'>Vào Chơi</div></div></div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Monster</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/com.bigbluebubble.singingmonsters.full/icon/singing-monsters.png" alt="Final Fantasy">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/big-blue/8811/singing-monsters.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Final Fantasy</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.square_enix.android_googleplay.ff7ecww%252Ficon%252Ffinal-fantasy-vii-ever-crisis.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Final Fantasy">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/a/10018/b.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Free Fire</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://i.imgur.com/lOSkJOQ.jpeg" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/garena-international-i/1398/free-fire.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Pubg Mobile</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.tencent.ig%252Ficon%252Fpubg-mobile-resistance.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/proxima-beta/2609/pubg-mobile-resistance.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Fortnite Mobile</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://decky.net/cdn/shop/articles/fortnite-auf-dem-steam-deck-spielen-so-nutzt-du-xbox-cloud-gaming-und-den-xbox-game-pass-ultimate-590812.jpg?v=1712917496&width=1600" alt="Fortnite">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/uncube/10004/now.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Ameow Us</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.innersloth.spacemafia%252Ficon%252Famong-us.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Ameow Us">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/innersloth-llc/4047/among-us.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Reverse</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.bluepoch.m.en.reverse1999%252Ficon%252Freverse-1999.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/bluepoch-co-ltd/5732/reverse-1999.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Horror Bet</div><div class="content"><div class="image"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIGiY8opgbf0QniwvRIpEt4lkiRpSwEFfxnw&s" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/tataki-studio/9122/horror-bet.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen"><div class="header">Thiết Bị VPN Ronaldo</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fjp.konami.pesam%252Ficon%252Fefootball-2024.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/a/2641/b.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Geometry Dash</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.nowgg.h5.pub501.app51387%252Ficon%252Fgeometry-dash.png%26w%3D256%26q%3D80&w=1440&q=70" alt="PUBG">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/griffpatch/51387/geometry-dash.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Honkai Star</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/com.HoYoverse.hkrpgoversea/icon/honkai-star-rail.png" alt="PUBG">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/cognosphere-pte-ltd/1591/honkai-star-rail.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen"><div class="header">Thiết Bị Pro Echocalypse</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.yoozoo.jgame.us%252Ficon%252Fechocalypse-scarlet-covenant.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/yoozoo-singapore-pte-ltd/7042/echocalypse-scarlet-covenant.html","_blank")'>Vào Chơi</div></div></div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Poppy Playtime</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.MOBGames.PoppyMobileChap1%252Ficon%252Fpoppy-playtime.png%26w%3D256%26q%3D80" alt="PUBG">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/mob-games-studio/1293/poppy-playtime.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Brawl Guys</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F9038%252Ficon%252Fbrawl-guys.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/tataki-studio/9038/brawl-guys.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Gacha Life</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fair.com.lunime.gachalife%252Ficon%252Fgacha-life.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Gacha Life">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/lunime/5767/gacha-life.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Electric Trains</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.ekindiegames.ElectricTrainsPro%252Ficon%252Felectric-trains-pro.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/npc-games/1988/electric-trains-pro.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Auto Chess</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.dragonest.autochess.nowgg%252Ficon%252Fauto-chess.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/dragonest/2404/auto-chess.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN World Box</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.mkarpenko.worldbox%252Ficon%252Fworldbox-sandbox-god-simulator.png%26w%3D256%26q%3D80&w=1440&q=70" alt="World Box">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/maxim-karpenko/1658/worldbox.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Punishing</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.kurogame.gplay.punishing.grayraven.en%252Ficon%252Fgray-raven.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Punishing Gray Raven">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/kuro-technology/9609/gray-raven.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Arknights</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.YoStarEN.Arknights%252Ficon%252Farknights.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Shadow Fight 3">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/yostar-limited/2211/arknights.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Scarlett Girl</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/9887/icon/scarlet-girls.png" alt="Scarlett Girl">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/burstgame/9887/scarlet-girls.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Lords Mobile</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.igg.android.lordsmobile%252Ficon%252Flords-mobile.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/igg-com/2581/lords-mobile.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Final Fantasy</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.machinezone.ffane%252Ficon%252Ffinal-fantasy-xv-war-for-eos.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/machine-zone-inc-/1992/final-fantasy-xv-war-for-eos.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Crazy Shoot</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.ym.crazyshoot%252Ficon%252Fcrazyshoot.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Crazy Shoot">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/montgame/4423/crazy-shoot.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Azur Lane</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.YoStarEN.AzurLane%252Ficon%252Fazure-lane.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/yostar-limited/3539/azur-lane.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Bà Granny</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.dvloper.granny%252Ficon%252Fgranny.png%26w%3D256%26q%3D80" alt="PUBG">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/dvloper/4807/granny.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Joker Tận Cốt Lõi</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F10412%252Ficon%252Fhorror-clown.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/plug-in-digital/10412/horror-clown.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Bà Già Ma</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.hgamesart.creepyscreamhorror%252Ficon%252Fcreepy-granny-scream.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/inlogic/2086/creepy-granny-scream.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Horror Ma Quái</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.eyesthegame.eyes.balance%252Ficon%252Feyes-the-horror-game.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/tuut/7647/eyes-the-horror-game.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Rise King Doms</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.lilithgame.roc.gp%252Ficon%252Frise-of-kingdoms.png%26w%3D256%26q%3D80&w=1440&q=70" alt="TikTok">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/lilithgames/1235/rise-of-kingdoms.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Yostar</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.YoStar.AetherGazer%252Ficon%252Faether-gazer.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/yostar-games/2053/aether-gazer.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Defense</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.nedigames.defense%252Ficon%252Ffortress-defense.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/nedi-games/2118/fortress-defense.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN TikTok</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.zhiliaoapp.musically%252Ficon%252Ftiktok.png%26w%3D256%26q%3D80&w=1440&q=70" alt="TikTok">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/tiktok/4478/tiktok.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Minecraft</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.ua.building.Lokicraft%252Ficon%252Flokicraft.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/akseno/6283/lokicraft.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Ragnarok</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.ggl.labyrinth.aos%252Ficon%252Fragnarok-labyrinth-nft.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/gravity-game-link/6619/ragnarok-labyrinth-nft.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Minecraft 2</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.nowgg.h5.pub511.app51240%252Ficon%252Fbloxd-io.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Minecraft 2">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/bloxd/51240/bloxd-io.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Paranormal</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F8264%252Ficon%252Fparanormal-inc.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/plug-in-digital/8264/paranormal-inc.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Meo Và Bạn</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.outfit7.mytalkingtomfriends%252Ficon%252Fmy-talking-tom-friends.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/outfit-limited/5645/my-talking-tom-friends.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN PUBG Mobile</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.tencent.ig%252Ficon%252Fpubg-mobile-resistance.png%26w%3D256%26q%3D80&w=1440&q=70" alt="PUBG Mobile">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/proxima-beta/2609/pubg-mobile-resistance.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Solar Smash</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.paradyme.solarsmash%252Ficon%252Fsolar-smash.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Solar Smash">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/paradyme-games/2629/solar-smash.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Plague Inc</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.miniclip.plagueinc%252Ficon%252Fplague-inc.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Plague Inc">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/miniclipcom/5059/plague-inc.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Avatar World</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.pazugames.avatarworld%252Ficon%252Favatar-world-city-life.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Avatar World">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/pazu-games/2767/avatar-world-city-life.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Tap Titans</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/com.gamehivecorp.taptitans2/icon/tap-titans-2.png" alt="Tap Titans">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/game-hive/8005/tap-titans-2.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Friday Night Funkin</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.nowgg.h5.pub501.app51181%252Ficon%252Ffriday-night-funkin.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Friday Night Funkin'">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/ninjamuffin99/51181/friday-night-funkin.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Tempest Pirate</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.herocraft.game.premium.tempest%252Ficon%252Ftempest-pirate-rpg-premium.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/herocraft/1493/tempest-pirate-rpg-premium.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Meo Meo</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.outfit7.mytalkingangela2%252Ficon%252Fmy-talking-angela-2.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Free Fire">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/outfit7-limited/7380/my-talking-angela-2.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Gacha Fife</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fair.com.lunime.gachalife2%252Ficon%252Fgacha-life-2.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/lunime/5691/gacha-life-2.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN YouTube</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.google.android.youtube%252Ficon%252Fyoutube.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/google-llc/1395/youtube.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Facebook</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.facebook.katana%252Ficon%252Ffacebook.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/meta-platforms-inc/1226/facebook.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Instagram</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.instagram.android%252Ficon%252Finstagram.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/instagram/1228/instagram.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN GTA 6</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F8830%252Ficon%252Freal-gangster-crime.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/naxeex-action-rpg-games/8830/real-gangster-crime.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Armor Age</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/apps-content/com.herocraft.game.free.armorage/icon/armor-age-ww2-tank-strategy.png" alt="Armor Age">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/herocraft-ltd/3806/armor-age-ww2.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+
+        <div class="screen">
+            <div class="header">Thiết Bị VPN Survivor Pixel</div>
+            <div class="content">
+                <div class="image">
+                    <img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.mrxw.android.ltgames%252Ficon%252Ffury-survivor-pixel-z.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Armor Age">
+                </div>
+                <div class="button" onclick="window.open('https://now.gg/apps/ltgames-global/2843/fury-survivor-pixel-z.html', '_blank')">
+                    Vào Chơi
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('container');
+    const screens = document.querySelectorAll('.screen');
+    const searchBox = document.getElementById('search-box');
+
+    function highlightCenterScreen() {
+        const containerRect = container.getBoundingClientRect();
+
+        screens.forEach(screen => {
+            const rect = screen.getBoundingClientRect();
+            const screenCenter = rect.top + rect.height / 2;
+            const containerCenter = containerRect.top + containerRect.height / 2;
+
+            const distance = Math.abs(screenCenter - containerCenter);
+            if (distance < rect.height / 2) {
+                screen.classList.add('active');
+            } else {
+                screen.classList.remove('active');
+            }
+        });
+    }
+
+    function filterScreens() {
+        const searchText = searchBox.value.toLowerCase();
+        screens.forEach(screen => {
+            const header = screen.querySelector('.header').textContent.toLowerCase();
+            if (header.includes(searchText)) {
+                screen.style.display = 'flex';
+            } else {
+                screen.style.display = 'none';
+            }
+        });
+    }
+
+    container.addEventListener('scroll', () => {
+        requestAnimationFrame(highlightCenterScreen);
+    });
+
+    searchBox.addEventListener('input', () => {
+        filterScreens();
+    });
+
+    window.addEventListener('load', () => {
+        highlightCenterScreen();
+        filterScreens();
+    });
+</script>
+
+</body>
+</html>
